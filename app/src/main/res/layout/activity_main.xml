@@ -5,7 +5,7 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#8C9EC1"
+    android:background="#85B2ED"
     tools:context=".MainActivity">
 
     <com.google.android.material.button.MaterialButton
@@ -14,8 +14,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
-        android:text="Reset All Progress"
-        android:textColor="#D32F2F"
+        android:fontFamily="@font/fjalla_one"
+        android:text="@string/reset_all_progress"
+        android:textColor="#F8F8F8"
+        android:textSize="20sp"
+        app:backgroundTint="#571919"
+        app:cornerRadius="14dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />

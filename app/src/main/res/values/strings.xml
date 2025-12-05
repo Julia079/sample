@@ -9,4 +9,6 @@
     <string name="save_progress">Save Progress</string>
     <string name="todo">TODO</string>
     <string name="back">Back</string>
+    <string name="reset_all_progress">Reset All Progress</string>
+    <string name="question_image">Question Image</string>
 </resources>
