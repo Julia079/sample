@@ -10,7 +10,7 @@
         android:id="@+id/level_button"
         android:layout_width="200dp"
         android:layout_height="75dp"
-        android:fontFamily="@font/fjalla_one"
+        android:fontFamily="@font/blueberry_personal"
         android:textAllCaps="true"
         android:textSize="30sp"
         app:backgroundTint="@color/celestial_blue"

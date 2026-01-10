@@ -21,5 +21,10 @@
     <string name="title_activity_failed">FailedActivity</string>
     <string name="complete_text">Level Complete</string>
     <string name="failed_text">Level Failed</string>
+    <string name="text_finish"> So, did you enjoy being an IT for a short time?</string>
+    <string name="text_yes">GOOD LUCK TO YOUR JOURNEY FUTURE IT</string>
+    <string name="text_no">GOOD LUCK IN FINDING YOUR PATH</string>
+    <string name="title_activity_yes">activity_yes</string>
+
 
 </resources>

@@ -18,6 +18,7 @@ class SkillActivity : AppCompatActivity() {
     private lateinit var levelContainer: LinearLayout
     private val levelStatus = mutableMapOf<Int, Boolean>()
     private lateinit var skillName: String
+    private lateinit var scoreTextView: TextView // The new TextView for the score
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -28,6 +29,7 @@ class SkillActivity : AppCompatActivity() {
         skillTitle.text = skillName
 
         levelContainer = findViewById(R.id.level_container)
+        scoreTextView = findViewById(R.id.score_text_view) // Find the TextView
 
         val backButton: Button = findViewById(R.id.back_button)
         backButton.setOnClickListener {
@@ -39,9 +41,10 @@ class SkillActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        // Always reload status and update buttons when the screen is shown
+        // Always reload status and update UI when the screen is shown
         loadLevelStatus()
         updateLevelButtons()
+        updateScoreDisplay() // Update the score display
     }
 
     private fun createLevelButtons() {
@@ -51,7 +54,6 @@ class SkillActivity : AppCompatActivity() {
             val levelButton: Button = levelButtonView.findViewById(R.id.level_button)
             levelButton.text = "Level $i"
             levelButton.setOnClickListener {
-                // Allow user to re-try failed levels or attempt new ones
                 if (levelStatus[i] != true) {
                     val intent = Intent(this, QuizActivity::class.java)
                     intent.putExtra("SKILL_NAME", skillName)
@@ -90,6 +92,12 @@ class SkillActivity : AppCompatActivity() {
                 }
             }
         }
+    }
+
+    // *** NEW FUNCTION TO UPDATE THE SCORE DISPLAY ***
+    private fun updateScoreDisplay() {
+        val score = levelStatus.values.count { it }
+        scoreTextView.text = "Score: $score / 10"
     }
 
     private fun loadLevelStatus() {
