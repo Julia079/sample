@@ -1,6 +1,5 @@
 package com.example.sample
 
-import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -10,14 +9,14 @@ import android.widget.Button
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
-import androidx.activity.result.contract.ActivityResultContracts
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 
 class SkillActivity : AppCompatActivity() {
 
     private lateinit var levelContainer: LinearLayout
-    private val levelStatus = mutableMapOf<Int, Boolean?>()
+    private val levelStatus = mutableMapOf<Int, Boolean>()
     private lateinit var skillName: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -35,13 +34,12 @@ class SkillActivity : AppCompatActivity() {
             finish()
         }
 
-        loadLevelStatus()
         createLevelButtons()
     }
 
     override fun onResume() {
         super.onResume()
-        // Refresh buttons when returning to this screen
+        // Always reload status and update buttons when the screen is shown
         loadLevelStatus()
         updateLevelButtons()
     }
@@ -53,27 +51,17 @@ class SkillActivity : AppCompatActivity() {
             val levelButton: Button = levelButtonView.findViewById(R.id.level_button)
             levelButton.text = "Level $i"
             levelButton.setOnClickListener {
-                val intent = Intent(this, QuizActivity::class.java)
-                intent.putExtra("SKILL_NAME", skillName)
-                intent.putExtra("LEVEL", i)
-                quizResultLauncher.launch(intent)
+                // Allow user to re-try failed levels or attempt new ones
+                if (levelStatus[i] != true) {
+                    val intent = Intent(this, QuizActivity::class.java)
+                    intent.putExtra("SKILL_NAME", skillName)
+                    intent.putExtra("LEVEL", i)
+                    startActivity(intent)
+                } else {
+                    Toast.makeText(this, "Level already passed!", Toast.LENGTH_SHORT).show()
+                }
             }
             levelContainer.addView(levelButtonView)
-        }
-        updateLevelButtons()
-    }
-
-    private val quizResultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-        if (result.resultCode == Activity.RESULT_OK) {
-            val data = result.data
-            val level = data?.getIntExtra("level", 0) ?: 0
-            // The 'passed' extra should be checked for existence
-            if (data?.hasExtra("passed") == true && level > 0) {
-                val passed = data.getBooleanExtra("passed", false)
-                levelStatus[level] = passed
-                saveLevelStatus()
-                updateLevelButtons()
-            }
         }
     }
 
@@ -98,26 +86,9 @@ class SkillActivity : AppCompatActivity() {
                     statusIcon.visibility = View.VISIBLE
                 }
                 null -> {
-                    levelButton.backgroundTintList = ContextCompat.getColorStateList(this, R.color.celestial_blue)
                     statusIcon.visibility = View.GONE
                 }
             }
-        }
-    }
-
-    private fun saveLevelStatus() {
-        val sharedPref = getSharedPreferences("LevelStatus", Context.MODE_PRIVATE) ?: return
-        with(sharedPref.edit()) {
-            // Save status for the current skill only
-            levelStatus.forEach { (level, passed) ->
-                val key = "${skillName}_level_${level}_passed"
-                if (passed != null) {
-                    putBoolean(key, passed)
-                } else {
-                    remove(key)
-                }
-            }
-            apply()
         }
     }
 
@@ -125,7 +96,7 @@ class SkillActivity : AppCompatActivity() {
         val sharedPref = getSharedPreferences("LevelStatus", Context.MODE_PRIVATE) ?: return
         levelStatus.clear()
         for (i in 1..10) {
-            val key = "${skillName}_level_${i}_passed"
+            val key = "${skillName}_${i}_passed"
             if (sharedPref.contains(key)) {
                 levelStatus[i] = sharedPref.getBoolean(key, false)
             }

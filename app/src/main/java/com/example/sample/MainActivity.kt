@@ -5,10 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
 import android.widget.Toast
-import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.sample.data.SampleSkills
@@ -16,13 +13,9 @@ import com.example.sample.data.SampleSkills
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
+
+        // *** CRITICAL FIX: The entire enableEdgeToEdge feature and its listener have been removed to fix the blank screen bug. ***
         setContentView(R.layout.activity_main)
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
-            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
-            insets
-        }
 
         val skillTreeRecyclerView: RecyclerView = findViewById(R.id.skill_tree_recycler_view)
         skillTreeRecyclerView.layoutManager = LinearLayoutManager(this)
@@ -35,13 +28,11 @@ class MainActivity : AppCompatActivity() {
 
         val resetButton: Button = findViewById(R.id.reset_button)
         resetButton.setOnClickListener {
-            // Clear all quiz progress
-            val quizProgressPrefs = getSharedPreferences("QuizProgress", Context.MODE_PRIVATE)
-            quizProgressPrefs.edit().clear().apply()
-
-            // Clear all completed level statuses
-            val levelStatusPrefs = getSharedPreferences("LevelStatus", Context.MODE_PRIVATE)
-            levelStatusPrefs.edit().clear().apply()
+            // Clear all saved data files synchronously to prevent race conditions
+            getSharedPreferences("QuizProgress", Context.MODE_PRIVATE).edit().clear().commit()
+            getSharedPreferences("LevelStatus", Context.MODE_PRIVATE).edit().clear().commit()
+            getSharedPreferences("CorrectAnswers", Context.MODE_PRIVATE).edit().clear().commit()
+            getSharedPreferences("TopicStatus", Context.MODE_PRIVATE).edit().clear().commit()
 
             Toast.makeText(this, "All progress has been reset.", Toast.LENGTH_SHORT).show()
 

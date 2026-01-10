@@ -11,4 +11,15 @@
     <string name="back">Back</string>
     <string name="reset_all_progress">Reset All Progress</string>
     <string name="question_image">Question Image</string>
+    <string name="title_activity_finish">FinishActivity</string>
+    <string name="title_activity_main2">MainActivity2</string>
+    <string name="finish_text">Congratulations!</string>
+    <string name="title_activity_assessment">AssessmentActivity</string>
+    <string name="title_activity_ending_dialog">activity_ending_dialog</string>
+    <string name="title_activity_endingdialog">EndingdialogActivity</string>
+    <string name="title_activity_complete">CompleteActivity</string>
+    <string name="title_activity_failed">FailedActivity</string>
+    <string name="complete_text">Level Complete</string>
+    <string name="failed_text">Level Failed</string>
+
 </resources>

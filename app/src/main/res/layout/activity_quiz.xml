@@ -4,77 +4,48 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#85B2ED"
+    android:background="#8C9EC1"
     tools:context=".QuizActivity">
 
-    <ImageButton
-        android:id="@+id/imageButton"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
-        android:layout_marginEnd="36dp"
-        android:background="?attr/selectableItemBackgroundBorderless"
-        android:contentDescription="@string/save_progress"
-        android:scaleType="fitCenter"
-        app:layout_constraintBottom_toTopOf="@+id/home_button"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.098"
-        app:srcCompat="@drawable/ic_save"
-        app:tint="@color/save_button_color" />
-
-    <TextView
-        android:id="@+id/question_number_text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?attr/textAppearanceHeadline6"
-        android:textSize="20sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.13"
-        tools:text="1/10" />
-
+    <!-- Question Text -->
     <TextView
         android:id="@+id/question_text"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="48dp"
         android:layout_marginEnd="16dp"
         android:textAlignment="center"
         android:textAppearance="?attr/textAppearanceHeadline6"
         android:textSize="22sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/question_number_text"
+        app:layout_constraintTop_toTopOf="parent"
         tools:text="Question text goes here" />
 
+    <!-- Optional Image for the Question -->
     <ImageView
         android:id="@+id/question_image"
         android:layout_width="0dp"
         android:layout_height="150dp"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
         android:visibility="gone"
-        android:contentDescription="@string/question_image"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/question_text"
         tools:src="@mipmap/ic_launcher" />
 
+    <!-- Navigation Buttons -->
     <com.google.android.material.button.MaterialButton
-        android:id="@+id/back_button"
+        android:id="@+id/previous_level_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginBottom="16dp"
-        android:fontFamily="@font/fjalla_one"
-        android:text="@string/back_button_text"
-        android:textSize="20sp"
-        app:backgroundTint="@color/celestial_blue"
-        app:cornerRadius="14dp"
+        android:text="Previous"
+        app:backgroundTint="@color/celestial_blue" 
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
@@ -83,38 +54,32 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
-        android:fontFamily="@font/fjalla_one"
-        android:text="@string/home_button_text"
-        android:textSize="20sp"
-        app:backgroundTint="@color/celestial_blue"
-        app:cornerRadius="14dp"
+        android:text="Back to Levels"
+        app:backgroundTint="@color/celestial_blue" 
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/next_button"
-        app:layout_constraintStart_toEndOf="@+id/back_button" />
+        app:layout_constraintEnd_toStartOf="@+id/next_level_button"
+        app:layout_constraintStart_toEndOf="@+id/previous_level_button" />
 
     <com.google.android.material.button.MaterialButton
-        android:id="@+id/next_button"
+        android:id="@+id/next_level_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="16dp"
-        android:fontFamily="@font/fjalla_one"
-        android:text="@string/next_button_text"
-        android:textSize="20sp"
-        app:backgroundTint="@color/celestial_blue"
-        app:cornerRadius="14dp"
+        android:text="Next"
+        app:backgroundTint="@color/celestial_blue" 
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
+    <!-- Scrollable RadioGroup for Answers -->
     <ScrollView
+        android:id="@+id/scrollView"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginStart="32dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="16dp"
         android:layout_marginEnd="32dp"
         android:layout_marginBottom="16dp"
-        android:maxHeight="300dp"
-        app:layout_constrainedHeight="true"
         app:layout_constraintBottom_toTopOf="@+id/home_button"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -124,41 +89,8 @@
             android:id="@+id/options_radio_group"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="8dp">
+            android:padding="8dp" />
 
-            <RadioButton
-                android:id="@+id/option1_radio_button"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:fontFamily="sans-serif"
-                android:textSize="18sp"
-                tools:text="Option 1 with some very long text to see how it wraps around to the next line" />
-
-            <RadioButton
-                android:id="@+id/option2_radio_button"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:fontFamily="sans-serif"
-                android:textSize="18sp"
-                tools:text="Option 2" />
-
-            <RadioButton
-                android:id="@+id/option3_radio_button"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:fontFamily="sans-serif"
-                android:textSize="18sp"
-                tools:text="Option 3" />
-
-            <RadioButton
-                android:id="@+id/option4_radio_button"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:fontFamily="sans-serif"
-                android:textSize="18sp"
-                tools:text="Option 4" />
-
-        </RadioGroup>
     </ScrollView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

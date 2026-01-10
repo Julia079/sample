@@ -11,6 +11,27 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Sample">
+
+        <!-- Changed the theme to the default full-screen theme -->
+        <activity
+            android:name=".CompleteActivity"
+            android:exported="false"
+            android:theme="@style/Theme.Sample" />
+        <activity
+            android:name=".FailedActivity"
+            android:exported="false"
+            android:theme="@style/Theme.Sample" />
+
+        <activity
+            android:name=".AssessmentActivity"
+            android:exported="false"
+            android:label="@string/title_activity_assessment"
+            android:theme="@style/Theme.Sample" />
+        <activity
+            android:name=".finishActivity"
+            android:exported="false"
+            android:label="@string/title_activity_finish"
+            android:theme="@style/Theme.Sample" />
         <activity
             android:name=".SplashActivity"
             android:exported="true">
@@ -23,10 +44,8 @@
         <activity
             android:name=".MainActivity"
             android:exported="false" />
-        <activity
-            android:name=".SkillActivity" />
-        <activity
-            android:name=".QuizActivity" />
+        <activity android:name=".SkillActivity" />
+        <activity android:name=".QuizActivity" />
 
         <meta-data
             android:name="preloaded_fonts"
