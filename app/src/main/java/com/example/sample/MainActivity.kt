@@ -13,8 +13,6 @@ import com.example.sample.data.SampleSkills
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        // *** CRITICAL FIX: The entire enableEdgeToEdge feature and its listener have been removed to fix the blank screen bug. ***
         setContentView(R.layout.activity_main)
 
         val skillTreeRecyclerView: RecyclerView = findViewById(R.id.skill_tree_recycler_view)
@@ -28,11 +26,12 @@ class MainActivity : AppCompatActivity() {
 
         val resetButton: Button = findViewById(R.id.reset_button)
         resetButton.setOnClickListener {
-            // Clear all saved data files synchronously to prevent race conditions
-            getSharedPreferences("QuizProgress", Context.MODE_PRIVATE).edit().clear().commit()
+            // Clear all saved data files synchronously
             getSharedPreferences("LevelStatus", Context.MODE_PRIVATE).edit().clear().commit()
-            getSharedPreferences("CorrectAnswers", Context.MODE_PRIVATE).edit().clear().commit()
             getSharedPreferences("TopicStatus", Context.MODE_PRIVATE).edit().clear().commit()
+            // *** CRITICAL FIX: Clear the new WrongAnswers and AttemptCounter data ***
+            getSharedPreferences("WrongAnswers", Context.MODE_PRIVATE).edit().clear().commit()
+            getSharedPreferences("AttemptCounter", Context.MODE_PRIVATE).edit().clear().commit()
 
             Toast.makeText(this, "All progress has been reset.", Toast.LENGTH_SHORT).show()
 

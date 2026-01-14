@@ -10,6 +10,7 @@ import android.widget.RadioGroup
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import com.example.sample.data.BasicHardwareQuiz
 import com.example.sample.data.CssBasicsQuiz
 import com.example.sample.data.HtmlBasicsQuiz
@@ -27,6 +28,7 @@ class QuizActivity : AppCompatActivity() {
     private lateinit var previousLevelButton: MaterialButton
     private lateinit var nextLevelButton: MaterialButton
     private lateinit var homeButton: MaterialButton
+    private lateinit var attemptCounterTextView: TextView
 
     private lateinit var questions: List<Question>
     private lateinit var skillName: String
@@ -58,6 +60,7 @@ class QuizActivity : AppCompatActivity() {
         previousLevelButton = findViewById(R.id.previous_level_button)
         nextLevelButton = findViewById(R.id.next_level_button)
         homeButton = findViewById(R.id.home_button)
+        attemptCounterTextView = findViewById(R.id.attempt_counter_text)
     }
 
     private fun loadQuestionsForSkill() {
@@ -74,7 +77,7 @@ class QuizActivity : AppCompatActivity() {
 
     private fun displayQuestion() {
         val question = questions[currentQuestionIndex]
-        questionTextView.text = question.text
+        questionTextView.text = "${currentQuestionIndex + 1}. ${question.text}"
 
         val imageRes = question.imageResId
         if (imageRes != null) {
@@ -87,22 +90,44 @@ class QuizActivity : AppCompatActivity() {
         optionsRadioGroup.removeAllViews()
         optionsRadioGroup.setOnCheckedChangeListener(null)
 
+        val customFont = androidx.core.content.res.ResourcesCompat.getFont(this, R.font.roboto_bold)
         question.options.forEachIndexed { index, option ->
             val radioButton = RadioButton(this)
             radioButton.text = option
             radioButton.id = index
-            radioButton.textSize = 18f
+            radioButton.textSize = 23f
+            radioButton.typeface = customFont
             val layoutParams = RadioGroup.LayoutParams(RadioGroup.LayoutParams.MATCH_PARENT, RadioGroup.LayoutParams.WRAP_CONTENT)
             radioButton.layoutParams = layoutParams
             optionsRadioGroup.addView(radioButton)
         }
 
-        val (savedAnswer, isCorrect) = getSavedAnswer(currentQuestionIndex)
-        if (isCorrect) {
-            optionsRadioGroup.check(savedAnswer)
+        val isPassed = getPassedStatus(currentQuestionIndex)
+        val attempts = getAttemptCount(currentQuestionIndex)
+        val wrongAnswers = getWrongAnswers(currentQuestionIndex)
+
+        if (isPassed) {
+            showAnswerFeedback(wrongAnswers, question.correctAnswerIndex, showCorrect = true)
             setOptionsEnabled(false)
+            if (attempts > 0) {
+                attemptCounterTextView.text = "Attempt: $attempts/2"
+                attemptCounterTextView.visibility = View.VISIBLE
+            } else {
+                attemptCounterTextView.visibility = View.GONE
+            }
+        } else if (attempts >= 2) {
+            showAnswerFeedback(wrongAnswers, question.correctAnswerIndex, showCorrect = true)
+            setOptionsEnabled(false)
+            attemptCounterTextView.text = "Attempts: 2/2"
+            attemptCounterTextView.visibility = View.VISIBLE
         } else {
-            optionsRadioGroup.clearCheck()
+            showAnswerFeedback(wrongAnswers, -1, showCorrect = false)
+            if (attempts > 0) {
+                attemptCounterTextView.text = "Attempt: $attempts/2"
+                attemptCounterTextView.visibility = View.VISIBLE
+            } else {
+                attemptCounterTextView.visibility = View.GONE
+            }
             setOptionsEnabled(true)
             optionsRadioGroup.setOnCheckedChangeListener { _, checkedId ->
                 handleAnswerSubmission(checkedId)
@@ -114,84 +139,144 @@ class QuizActivity : AppCompatActivity() {
     }
 
     private fun setupNavigationListeners() {
-        previousLevelButton.setOnClickListener {
-            if (currentQuestionIndex > 0) {
-                currentQuestionIndex--
-                displayQuestion()
-            }
-        }
-
-        nextLevelButton.setOnClickListener {
-            if (currentQuestionIndex < questions.size - 1) {
-                currentQuestionIndex++
-                displayQuestion()
-            }
-        }
-
-        homeButton.setOnClickListener {
-            finish()
-        }
+        previousLevelButton.setOnClickListener { navigateToQuestion(currentQuestionIndex - 1) }
+        nextLevelButton.setOnClickListener { navigateToQuestion(currentQuestionIndex + 1) }
+        homeButton.setOnClickListener { finish() }
     }
 
     private fun handleAnswerSubmission(checkedId: Int) {
         val question = questions[currentQuestionIndex]
         val passed = checkedId == question.correctAnswerIndex
 
+        savePassedStatus(currentQuestionIndex, passed)
+
         if (passed) {
-            Toast.makeText(this, "Correct!", Toast.LENGTH_SHORT).show()
+            val wrongAnswers = getWrongAnswers(currentQuestionIndex)
+            showAnswerFeedback(wrongAnswers, checkedId, showCorrect = true)
+            setOptionsEnabled(false)
+
+            val attempts = getAttemptCount(currentQuestionIndex)
+            if (attempts > 0) {
+                attemptCounterTextView.text = "Attempt: ${attempts}/2"
+                attemptCounterTextView.visibility = View.VISIBLE
+            }
+            optionsRadioGroup.postDelayed({ moveToNextQuestion() }, 1200)
         } else {
-            Toast.makeText(this, "Wrong!", Toast.LENGTH_SHORT).show()
+            incrementAttemptCount(currentQuestionIndex)
+            val newAttemptCount = getAttemptCount(currentQuestionIndex)
+
+            addWrongAnswer(currentQuestionIndex, checkedId)
+            val wrongAnswers = getWrongAnswers(currentQuestionIndex)
+
+            if (newAttemptCount >= 2) {
+                savePassedStatus(currentQuestionIndex, false) 
+                showAnswerFeedback(wrongAnswers, question.correctAnswerIndex, showCorrect = true)
+                setOptionsEnabled(false)
+                attemptCounterTextView.text = "Attempts: 2/2"
+                attemptCounterTextView.visibility = View.VISIBLE
+                optionsRadioGroup.postDelayed({ moveToNextQuestion() }, 1200)
+            } else {
+                showAnswerFeedback(wrongAnswers, -1, showCorrect = false)
+                attemptCounterTextView.text = "Attempt: 1/2"
+                attemptCounterTextView.visibility = View.VISIBLE
+                Toast.makeText(this, "Wrong! Try again.", Toast.LENGTH_SHORT).show()
+            }
         }
+    }
 
-        saveAnswer(currentQuestionIndex, passed)
-        setOptionsEnabled(false)
+    private fun showAnswerFeedback(wronglySelectedIds: Set<Int>, correctId: Int, showCorrect: Boolean) {
+        for (i in 0 until optionsRadioGroup.childCount) {
+            val radioButton = optionsRadioGroup.getChildAt(i) as RadioButton
+            val id = radioButton.id
+            radioButton.setTextColor(questionTextView.currentTextColor)
+            radioButton.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0)
 
-        optionsRadioGroup.postDelayed({ moveToNextQuestion() }, 1200)
+            if (showCorrect && id == correctId) {
+                radioButton.setTextColor(ContextCompat.getColor(this, R.color.green))
+                radioButton.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_check_green, 0)
+            } else if (wronglySelectedIds.contains(id)) {
+                radioButton.setTextColor(ContextCompat.getColor(this, R.color.red))
+                radioButton.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_clear_red, 0)
+            }
+        }
+    }
+
+    private fun navigateToQuestion(index: Int) {
+        if (index >= 0 && index < questions.size) {
+            currentQuestionIndex = index
+            displayQuestion()
+        }
     }
 
     private fun moveToNextQuestion() {
         if (currentQuestionIndex < questions.size - 1) {
-            currentQuestionIndex++
-            displayQuestion()
+            navigateToQuestion(currentQuestionIndex + 1)
         } else {
             handleTopicCompletion()
         }
     }
 
     private fun handleTopicCompletion() {
-        val sharedPref = getSharedPreferences("LevelStatus", Context.MODE_PRIVATE)
-        var score = 0
-        for (i in questions.indices) {
-            if (sharedPref.getBoolean("${skillName}_${i + 1}_passed", false)) {
-                score++
+        val levelStatusPrefs = getSharedPreferences("LevelStatus", Context.MODE_PRIVATE)
+        
+        var answeredCount = 0
+        for (i in 1..questions.size) {
+            if (levelStatusPrefs.contains(getPassedKey(i-1))) {
+                answeredCount++
             }
         }
 
-        val percentage = (score.toDouble() / questions.size.toDouble()) * 100
-
-        if (percentage >= 80) {
-            startActivity(Intent(this, CompleteActivity::class.java))
-        } else {
-            startActivity(Intent(this, FailedActivity::class.java))
+        if (answeredCount == questions.size) {
+            var score = 0
+            for (i in questions.indices) {
+                if (levelStatusPrefs.getBoolean(getPassedKey(i), false)) {
+                    score++
+                }
+            }
+            val percentage = (score.toDouble() / questions.size.toDouble()) * 100
+            if (percentage >= 80) {
+                startActivity(Intent(this, CompleteActivity::class.java))
+            } else {
+                startActivity(Intent(this, FailedActivity::class.java))
+            }
         }
         finish()
     }
 
-    private fun getAnswerKey(index: Int): String = "${skillName}_${index + 1}_passed"
+    private fun getPassedKey(index: Int): String = "${skillName}_${index + 1}_passed"
+    private fun getWrongAnswersKey(index: Int): String = "${skillName}_${index + 1}_wrong_answers"
+    private fun getAttemptKey(index: Int): String = "${skillName}_${index + 1}_attempts"
 
-    private fun saveAnswer(index: Int, passed: Boolean) {
-        val sharedPref = getSharedPreferences("LevelStatus", Context.MODE_PRIVATE) ?: return
-        with(sharedPref.edit()) {
-            putBoolean(getAnswerKey(index), passed)
-            apply()
-        }
+    private fun savePassedStatus(index: Int, passed: Boolean) {
+        getSharedPreferences("LevelStatus", Context.MODE_PRIVATE).edit()
+            .putBoolean(getPassedKey(index), passed).commit()
     }
 
-    private fun getSavedAnswer(index: Int): Pair<Int, Boolean> {
-        val sharedPref = getSharedPreferences("LevelStatus", Context.MODE_PRIVATE) ?: return Pair(-1, false)
-        val isCorrect = sharedPref.getBoolean(getAnswerKey(index), false)
-        val answer = if (isCorrect) questions[index].correctAnswerIndex else -1
-        return Pair(answer, isCorrect)
+    private fun getPassedStatus(index: Int): Boolean {
+        return getSharedPreferences("LevelStatus", Context.MODE_PRIVATE)
+            .getBoolean(getPassedKey(index), false)
+    }
+
+    private fun addWrongAnswer(index: Int, selectedAnswer: Int) {
+        val prefs = getSharedPreferences("WrongAnswers", Context.MODE_PRIVATE)
+        val wrongAnswers = prefs.getStringSet(getWrongAnswersKey(index), emptySet())?.toMutableSet() ?: mutableSetOf()
+        wrongAnswers.add(selectedAnswer.toString())
+        prefs.edit().putStringSet(getWrongAnswersKey(index), wrongAnswers).commit()
+    }
+
+    private fun getWrongAnswers(index: Int): Set<Int> {
+        val prefs = getSharedPreferences("WrongAnswers", Context.MODE_PRIVATE)
+        return prefs.getStringSet(getWrongAnswersKey(index), emptySet())?.mapNotNull { it.toIntOrNull() }?.toSet() ?: emptySet()
+    }
+
+    private fun incrementAttemptCount(index: Int) {
+        val prefs = getSharedPreferences("AttemptCounter", Context.MODE_PRIVATE)
+        val currentAttempts = prefs.getInt(getAttemptKey(index), 0)
+        prefs.edit().putInt(getAttemptKey(index), currentAttempts + 1).commit()
+    }
+
+    private fun getAttemptCount(index: Int): Int {
+        return getSharedPreferences("AttemptCounter", Context.MODE_PRIVATE).getInt(getAttemptKey(index), 0)
     }
 
     private fun setOptionsEnabled(enabled: Boolean) {

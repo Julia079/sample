@@ -4,23 +4,32 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="8dp"
-    android:background="#8C9EC1"
+    android:layout_marginTop="25dp"
+    android:layout_marginBottom="0dp"
+    android:layout_marginLeft="10dp"
+    android:layout_marginRight="10dp"
+    android:background="@color/background_blue"
     app:cardCornerRadius="8dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:padding="16dp">
 
         <TextView
             android:id="@+id/skill_name"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:fontFamily="@font/roboto_bold"
+            android:textAllCaps="false"
             android:textAppearance="?attr/textAppearanceHeadline6"
+            android:textColor="@color/celestial_blue"
+            android:textSize="25sp"
+            app:layout_constraintBottom_toTopOf="@+id/skill_description"
             app:layout_constraintEnd_toStartOf="@+id/lock_icon"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_chainStyle="packed"
             tools:text="Skill Name" />
 
         <TextView
@@ -29,6 +38,8 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
             android:textAppearance="?attr/textAppearanceBody2"
+            android:textSize="15sp"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="@+id/skill_name"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/skill_name"

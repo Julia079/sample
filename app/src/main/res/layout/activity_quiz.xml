@@ -4,38 +4,78 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#8C9EC1"
+    android:background="@color/background_blue"
     tools:context=".QuizActivity">
 
-    <!-- Question Text -->
+    <!-- This LinearLayout wrapper ensures the content block is centered -->
+
     <TextView
-        android:id="@+id/question_text"
+        android:id="@+id/attempt_counter_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="28dp"
+        android:layout_marginTop="164dp"
+        android:fontFamily="@font/roboto_bold"
+        android:textAppearance="?attr/textAppearanceSubtitle1"
+        android:visibility="gone"
+        app:layout_constraintBottom_toTopOf="@+id/linearLayout"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.348"
+        tools:text="Attempt: 1/2"
+        tools:visibility="visible" />
+
+    <LinearLayout
+        android:id="@+id/linearLayout"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="48dp"
-        android:layout_marginEnd="16dp"
-        android:textAlignment="center"
-        android:textAppearance="?attr/textAppearanceHeadline6"
-        android:textSize="22sp"
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toTopOf="@+id/home_button"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:text="Question text goes here" />
+        app:layout_constraintVertical_bias="0.5">
 
-    <!-- Optional Image for the Question -->
-    <ImageView
-        android:id="@+id/question_image"
-        android:layout_width="0dp"
-        android:layout_height="150dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="16dp"
-        android:visibility="gone"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/question_text"
-        tools:src="@mipmap/ic_launcher" />
+        <TextView
+            android:id="@+id/question_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="24dp"
+            android:layout_marginEnd="24dp"
+            android:fontFamily="@font/roboto_bold"
+            android:textAlignment="center"
+            android:textAppearance="?attr/textAppearanceHeadline6"
+            android:textSize="30sp"
+            tools:text="Question text goes here" />
+
+        <ImageView
+            android:id="@+id/question_image"
+            android:layout_width="match_parent"
+            android:layout_height="150dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            android:visibility="gone"
+            tools:src="@mipmap/ic_launcher" />
+
+        <ScrollView
+            android:id="@+id/scrollView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="32dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="32dp">
+
+            <RadioGroup
+                android:id="@+id/options_radio_group"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="30dp" />
+
+        </ScrollView>
+
+    </LinearLayout>
 
     <!-- Navigation Buttons -->
     <com.google.android.material.button.MaterialButton
@@ -45,8 +85,8 @@
         android:layout_marginStart="16dp"
         android:layout_marginBottom="16dp"
         android:fontFamily="@font/blueberry_personal"
-        android:text="Previous"
-        app:backgroundTint="@color/celestial_blue" 
+        android:text="@string/previous"
+        app:backgroundTint="@color/celestial_blue"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
@@ -56,8 +96,8 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
         android:fontFamily="@font/blueberry_personal"
-        android:text="Back to Levels"
-        app:backgroundTint="@color/celestial_blue" 
+        android:text="@string/back_to_levels"
+        app:backgroundTint="@color/celestial_blue"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/next_level_button"
         app:layout_constraintStart_toEndOf="@+id/previous_level_button" />
@@ -69,31 +109,9 @@
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="16dp"
         android:fontFamily="@font/blueberry_personal"
-        android:text="Next"
-        app:backgroundTint="@color/celestial_blue" 
+        android:text="@string/next"
+        app:backgroundTint="@color/celestial_blue"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
-
-    <!-- Scrollable RadioGroup for Answers -->
-    <ScrollView
-        android:id="@+id/scrollView"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginStart="32dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="32dp"
-        android:layout_marginBottom="16dp"
-        app:layout_constraintBottom_toTopOf="@+id/home_button"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/question_image">
-
-        <RadioGroup
-            android:id="@+id/options_radio_group"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="8dp" />
-
-    </ScrollView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
