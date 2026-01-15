@@ -52,7 +52,7 @@ class SkillActivity : AppCompatActivity() {
         updateLevelButtons()
         updateScoreDisplay()
         updatePercentageDisplay()
-        // *** CRITICAL FIX: Check for completion every time the screen is shown ***
+        // *** CRITICAL FIX: The completion check now only happens here ***
         checkTopicCompletion()
     }
 
@@ -118,6 +118,7 @@ class SkillActivity : AppCompatActivity() {
         }
     }
 
+    // *** The correct, centralized completion logic ***
     private fun checkTopicCompletion() {
         val topicStatusPrefs = getSharedPreferences("TopicStatus", Context.MODE_PRIVATE)
         val hasBeenShown = topicStatusPrefs.getBoolean(skillName, false)
@@ -134,6 +135,7 @@ class SkillActivity : AppCompatActivity() {
                     startActivity(Intent(this, FailedActivity::class.java))
                 }
 
+                // Set the flag to prevent it from showing again
                 with(topicStatusPrefs.edit()) {
                     putBoolean(skillName, true)
                     commit()

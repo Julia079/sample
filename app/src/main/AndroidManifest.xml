@@ -11,12 +11,16 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Sample">
+
+        <!-- CRITICAL FIX: Changed theme to make it a full screen activity -->
         <activity
-            android:name=".activity_yes"
+            android:name=".EndingDialogActivity"
             android:exported="false"
-            android:label="@string/title_activity_yes"
             android:theme="@style/Theme.Sample" />
-        <!-- Changed the theme to the default full-screen theme -->
+        <activity
+            android:name=".YesActivity"
+            android:exported="false" />
+
         <activity
             android:name=".CompleteActivity"
             android:exported="false"
@@ -25,6 +29,7 @@
             android:name=".FailedActivity"
             android:exported="false"
             android:theme="@style/Theme.Sample" />
+
         <activity
             android:name=".AssessmentActivity"
             android:exported="false"

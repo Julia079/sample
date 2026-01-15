@@ -2,32 +2,25 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/root_layout" 
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/background_blue">
 
     <TextView
-        android:id="@+id/textView4"
-        android:layout_width="295dp"
-        android:layout_height="190dp"
-        android:text="@string/text_yes"
-        android:textAlignment="center"
-        android:textSize="28sp"
-        app:layout_constraintBottom_toBottomOf="@+id/imageView5"
-        app:layout_constraintEnd_toEndOf="@+id/imageView5"
-        app:layout_constraintHorizontal_bias="0.58"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/imageView5"
-        app:layout_constraintVertical_bias="0.6" />
-
-    <ImageView
-        android:id="@+id/imageView5"
-        android:layout_width="wrap_content"
+        android:id="@+id/final_message_text"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-
-        app:srcCompat="@drawable/download"
-        tools:layout_editor_absoluteX="-16dp"
-        tools:layout_editor_absoluteY="16dp" />
-
+        android:layout_marginStart="32dp"
+        android:layout_marginEnd="32dp"
+        android:fontFamily="@font/blueberry_personal"
+        android:textAlignment="center"
+        android:textAppearance="?attr/textAppearanceHeadline5"
+        android:textColor="@color/celestial_blue"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="GOOD LUCK ON YOUR JOURNEY FUTURE IT" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

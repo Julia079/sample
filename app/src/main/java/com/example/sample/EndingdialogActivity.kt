@@ -1,47 +1,32 @@
 package com.example.sample
 
+import android.content.Intent
 import android.os.Bundle
-import androidx.activity.ComponentActivity
-import androidx.activity.compose.setContent
-import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
-import com.example.sample.ui.theme.SampleTheme
+import android.widget.Button
+import android.widget.RadioGroup
+import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 
-class EndingdialogActivity : ComponentActivity() {
+class EndingDialogActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
-        setContent {
-            SampleTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Greeting3(
-                        name = "Android",
-                        modifier = Modifier.padding(innerPadding)
-                    )
+        setContentView(R.layout.activity_endingdialog)
+
+        val radioGroup = findViewById<RadioGroup>(R.id.assessment_radio_group)
+        val submitButton = findViewById<Button>(R.id.submit_assessment_button)
+
+        submitButton.setOnClickListener {
+            val selectedId = radioGroup.checkedRadioButtonId
+            if (selectedId == -1) {
+                Toast.makeText(this, "Please select an option.", Toast.LENGTH_SHORT).show()
+            } else {
+                val choice = if (selectedId == R.id.yes_radio_button) "Yes" else "No"
+                val intent = Intent(this, YesActivity::class.java).apply {
+                    putExtra("USER_CHOICE", choice)
                 }
+                startActivity(intent)
+                finish()
             }
         }
-    }
-}
-
-@Composable
-fun Greeting3(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview3() {
-    SampleTheme {
-        Greeting3("Android")
     }
 }

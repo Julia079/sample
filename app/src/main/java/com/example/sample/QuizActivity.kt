@@ -90,7 +90,7 @@ class QuizActivity : AppCompatActivity() {
         optionsRadioGroup.removeAllViews()
         optionsRadioGroup.setOnCheckedChangeListener(null)
 
-        val customFont = androidx.core.content.res.ResourcesCompat.getFont(this, R.font.roboto_bold)
+        val customFont = androidx.core.content.res.ResourcesCompat.getFont(this, R.font.blueberry_personal)
         question.options.forEachIndexed { index, option ->
             val radioButton = RadioButton(this)
             radioButton.text = option
@@ -212,35 +212,9 @@ class QuizActivity : AppCompatActivity() {
         if (currentQuestionIndex < questions.size - 1) {
             navigateToQuestion(currentQuestionIndex + 1)
         } else {
-            handleTopicCompletion()
+            // *** CRITICAL FIX: Simply finish the activity. Do not check for completion here. ***
+            finish()
         }
-    }
-
-    private fun handleTopicCompletion() {
-        val levelStatusPrefs = getSharedPreferences("LevelStatus", Context.MODE_PRIVATE)
-        
-        var answeredCount = 0
-        for (i in 1..questions.size) {
-            if (levelStatusPrefs.contains(getPassedKey(i-1))) {
-                answeredCount++
-            }
-        }
-
-        if (answeredCount == questions.size) {
-            var score = 0
-            for (i in questions.indices) {
-                if (levelStatusPrefs.getBoolean(getPassedKey(i), false)) {
-                    score++
-                }
-            }
-            val percentage = (score.toDouble() / questions.size.toDouble()) * 100
-            if (percentage >= 80) {
-                startActivity(Intent(this, CompleteActivity::class.java))
-            } else {
-                startActivity(Intent(this, FailedActivity::class.java))
-            }
-        }
-        finish()
     }
 
     private fun getPassedKey(index: Int): String = "${skillName}_${index + 1}_passed"

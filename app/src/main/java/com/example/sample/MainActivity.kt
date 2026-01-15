@@ -17,26 +17,26 @@ class MainActivity : AppCompatActivity() {
 
         val skillTreeRecyclerView: RecyclerView = findViewById(R.id.skill_tree_recycler_view)
         skillTreeRecyclerView.layoutManager = LinearLayoutManager(this)
-        val adapter = SkillAdapter(SampleSkills.skills) { skill ->
-            val intent = Intent(this, SkillActivity::class.java)
-            intent.putExtra("SKILL_NAME", skill.name)
-            startActivity(intent)
-        }
-        skillTreeRecyclerView.adapter = adapter
 
         val resetButton: Button = findViewById(R.id.reset_button)
         resetButton.setOnClickListener {
-            // Clear all saved data files synchronously
+            // *** CRITICAL FIX: Clear all five save files for a full factory reset ***
             getSharedPreferences("LevelStatus", Context.MODE_PRIVATE).edit().clear().commit()
             getSharedPreferences("TopicStatus", Context.MODE_PRIVATE).edit().clear().commit()
-            // *** CRITICAL FIX: Clear the new WrongAnswers and AttemptCounter data ***
             getSharedPreferences("WrongAnswers", Context.MODE_PRIVATE).edit().clear().commit()
             getSharedPreferences("AttemptCounter", Context.MODE_PRIVATE).edit().clear().commit()
+            getSharedPreferences("TopicUnlockStatus", Context.MODE_PRIVATE).edit().clear().commit()
 
             Toast.makeText(this, "All progress has been reset.", Toast.LENGTH_SHORT).show()
 
             // Recreate the activity to refresh the UI
             recreate()
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        val skillTreeRecyclerView: RecyclerView = findViewById(R.id.skill_tree_recycler_view)
+        skillTreeRecyclerView.adapter = SkillAdapter(SampleSkills.skills, this)
     }
 }

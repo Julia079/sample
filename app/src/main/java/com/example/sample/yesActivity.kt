@@ -1,47 +1,30 @@
 package com.example.sample
 
 import android.os.Bundle
-import androidx.activity.ComponentActivity
-import androidx.activity.compose.setContent
-import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
-import com.example.sample.ui.theme.SampleTheme
+import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
+import androidx.constraintlayout.widget.ConstraintLayout
 
-class yesActivity : ComponentActivity() {
+class YesActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
-        setContent {
-            SampleTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Greeting4(
-                        name = "Android",
-                        modifier = Modifier.padding(innerPadding)
-                    )
-                }
-            }
+        setContentView(R.layout.activity_yes)
+
+        val finalMessageTextView = findViewById<TextView>(R.id.final_message_text)
+        val rootLayout = findViewById<ConstraintLayout>(R.id.root_layout)
+        val userChoice = intent.getStringExtra("USER_CHOICE")
+
+        val message = if (userChoice == "Yes") {
+            "GOOD LUCK ON YOUR JOURNEY FUTURE IT"
+        } else {
+            "GOOD LUCK IN FINDING YOUR PATH"
         }
-    }
-}
 
-@Composable
-fun Greeting4(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
+        finalMessageTextView.text = message
 
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview4() {
-    SampleTheme {
-        Greeting4("Android")
+        // *** CRITICAL FIX: Make the screen exitable on tap ***
+        rootLayout.setOnClickListener {
+            finish()
+        }
     }
 }
