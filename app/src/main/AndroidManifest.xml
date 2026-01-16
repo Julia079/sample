@@ -35,11 +35,6 @@
             android:theme="@style/Theme.Sample" />
 
         <activity
-            android:name=".AssessmentActivity"
-            android:exported="false"
-            android:label="@string/title_activity_assessment"
-            android:theme="@style/Theme.Sample" />
-        <activity
             android:name=".finishActivity"
             android:exported="false"
             android:label="@string/title_activity_finish"
