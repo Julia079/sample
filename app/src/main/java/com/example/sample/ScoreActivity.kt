@@ -7,6 +7,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 
 class ScoreActivity : AppCompatActivity() {
 
@@ -31,6 +32,11 @@ class ScoreActivity : AppCompatActivity() {
         scoreTextView.text = "Score: $score / 10"
         percentageTextView.text = "($percentage%)"
 
+        // *** CRITICAL FIX: Apply color based on percentage ***
+        val colorRes = if (percentage >= 80) R.color.green else R.color.red
+        scoreTextView.setTextColor(ContextCompat.getColor(this, colorRes))
+        percentageTextView.setTextColor(ContextCompat.getColor(this, colorRes))
+
         val (level, description) = getKnowledgeLevel(percentage)
         levelTitleTextView.text = level
         levelDescTextView.text = description
@@ -38,7 +44,7 @@ class ScoreActivity : AppCompatActivity() {
         val resetButton: Button = findViewById(R.id.score_popup_reset_button)
         resetButton.setOnClickListener {
             resetCurrentTopicProgress()
-            setResult(RESULT_OK) 
+            setResult(RESULT_OK)
             finish()
         }
 
@@ -60,24 +66,22 @@ class ScoreActivity : AppCompatActivity() {
 
     private fun resetCurrentTopicProgress() {
         val levelStatusPrefs = getSharedPreferences("LevelStatus", Context.MODE_PRIVATE).edit()
+        val topicStatusPrefs = getSharedPreferences("TopicStatus", Context.MODE_PRIVATE).edit()
         val wrongAnswersPrefs = getSharedPreferences("WrongAnswers", Context.MODE_PRIVATE).edit()
         val attemptCounterPrefs = getSharedPreferences("AttemptCounter", Context.MODE_PRIVATE).edit()
-        // *** CRITICAL FIX: Also get the TopicStatus prefs to reset the completion flag ***
-        val topicStatusPrefs = getSharedPreferences("TopicStatus", Context.MODE_PRIVATE).edit()
 
         for (i in 1..10) {
             levelStatusPrefs.remove("${skillName}_${i}_passed")
             wrongAnswersPrefs.remove("${skillName}_${i}_wrong_answers")
             attemptCounterPrefs.remove("${skillName}_${i}_attempts")
         }
-
-        // *** CRITICAL FIX: Remove the "completion shown" flag for the current topic ***
+        
         topicStatusPrefs.remove(skillName)
 
         levelStatusPrefs.apply()
+        topicStatusPrefs.apply()
         wrongAnswersPrefs.apply()
         attemptCounterPrefs.apply()
-        topicStatusPrefs.apply()
 
         Toast.makeText(this, "Progress for '$skillName' has been reset.", Toast.LENGTH_SHORT).show()
     }

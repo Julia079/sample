@@ -37,7 +37,7 @@ class SkillActivity : AppCompatActivity() {
             finish()
         }
 
-        val scoreButton: Button = findViewById(R.id.reset_button) // This is the 'Score' button
+        val scoreButton: Button = findViewById(R.id.reset_button) 
         scoreButton.setOnClickListener {
             val score = levelStatus.values.count { it == true }
             val percentage = ((score.toDouble() / 10.0) * 100).toInt()
@@ -117,11 +117,11 @@ class SkillActivity : AppCompatActivity() {
         val percentage = (score.toDouble() / 10.0) * 100
         percentageTextView.text = "(${percentage.toInt()}%)"
 
-        if (percentage >= 80) {
-            percentageTextView.setTextColor(ContextCompat.getColorStateList(this, R.color.green))
-        } else {
-            percentageTextView.setTextColor(ContextCompat.getColorStateList(this, R.color.red))
-        }
+        // *** CRITICAL FIX: Apply color to both score and percentage TextViews ***
+        val colorRes = if (percentage >= 80) R.color.green else R.color.red
+        val colorStateList = ContextCompat.getColorStateList(this, colorRes)
+        scoreTextView.setTextColor(colorStateList)
+        percentageTextView.setTextColor(colorStateList)
     }
 
     private fun checkTopicCompletion() {
@@ -140,7 +140,6 @@ class SkillActivity : AppCompatActivity() {
                     Intent(this, FailedActivity::class.java)
                 }
 
-                // *** CRITICAL FIX: Pass the score info to the next screen ***
                 intent.apply {
                     putExtra("SKILL_NAME", skillName)
                     putExtra("SCORE", score)
