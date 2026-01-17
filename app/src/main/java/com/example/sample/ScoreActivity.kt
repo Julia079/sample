@@ -26,6 +26,7 @@ class ScoreActivity : AppCompatActivity() {
         val percentageTextView: TextView = findViewById(R.id.score_popup_percentage)
         val levelTitleTextView: TextView = findViewById(R.id.knowledge_level_title)
         val levelDescTextView: TextView = findViewById(R.id.knowledge_level_description)
+        val levelKnowledge: TextView = findViewById(R.id.text_know)
         val closeButton: ImageView = findViewById(R.id.score_popup_close_button)
 
         titleTextView.text = skillName
@@ -40,6 +41,7 @@ class ScoreActivity : AppCompatActivity() {
         val (level, description) = getKnowledgeLevel(percentage)
         levelTitleTextView.text = level
         levelDescTextView.text = description
+        levelKnowledge.text = "Knowledge Level: "
 
         val resetButton: Button = findViewById(R.id.score_popup_reset_button)
         resetButton.setOnClickListener {
