@@ -79,7 +79,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
         android:fontFamily="@font/blueberry_personal"
-        android:textSize="20sp"
+        android:textSize="15sp"
         android:text="@string/submit_button_text"
         app:backgroundTint="@color/celestial_blue"
         app:cornerRadius="17dp"

@@ -117,6 +117,8 @@
                 app:layout_constraintTop_toBottomOf="@+id/text_know"
                 tools:text="well, well, well welcome Joe !" />
 
+
+
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/score_popup_reset_button"
                 android:layout_width="wrap_content"

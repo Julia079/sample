@@ -33,6 +33,9 @@
     <string name="username">Username:</string>
     <string name="knowledge_level_brain_rot">Knowledge Level:</string>
     <string name="leaderboard">Leaderboard</string>
+    <string name="title_activity_summary_activty">SummaryActivty</string>
+    <string name="title_activity_summary">SummaryActivity</string>
+    <string name="summary">Summary</string>
 
 
 </resources>

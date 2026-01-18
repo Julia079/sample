@@ -11,12 +11,20 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Sample">
-
+        <activity
+            android:name=".SummaryActivity"
+            android:exported="false"
+            android:label="@string/title_activity_summary"
+            android:theme="@style/Theme.Sample" />
+        <activity
+            android:name=".SummaryActivty"
+            android:exported="false"
+            android:label="@string/title_activity_summary_activty"
+            android:theme="@style/Theme.Sample" />
         <activity
             android:name=".ScoreActivity"
             android:exported="false"
             android:theme="@style/Theme.Sample.Dialog" />
-
         <activity
             android:name=".EndingDialogActivity"
             android:exported="false"
@@ -24,7 +32,6 @@
         <activity
             android:name=".YesActivity"
             android:exported="false" />
-
         <activity
             android:name=".CompleteActivity"
             android:exported="false"
@@ -33,7 +40,6 @@
             android:name=".FailedActivity"
             android:exported="false"
             android:theme="@style/Theme.Sample" />
-
         <activity
             android:name=".finishActivity"
             android:exported="false"
