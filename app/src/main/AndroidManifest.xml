@@ -17,11 +17,6 @@
             android:label="@string/title_activity_summary"
             android:theme="@style/Theme.Sample" />
         <activity
-            android:name=".SummaryActivty"
-            android:exported="false"
-            android:label="@string/title_activity_summary_activty"
-            android:theme="@style/Theme.Sample" />
-        <activity
             android:name=".ScoreActivity"
             android:exported="false"
             android:theme="@style/Theme.Sample.Dialog" />
