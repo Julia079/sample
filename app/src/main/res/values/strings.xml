@@ -47,6 +47,8 @@
     <string name="login">Login</string>
     <string name="forgot_password">Forgot Password?</string>
     <string name="dont_have_an_account">Don\'t have an account?</string>
+    <string name="google">Sign in with Google</string>
+    <string name="or">Or</string>
 
 
 </resources>
