@@ -2,6 +2,7 @@ package com.example.sample
 
 import android.content.Intent
 import android.os.Bundle
+import android.widget.Button
 import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -22,6 +23,12 @@ class Register : AppCompatActivity() {
         loginTextView.setOnClickListener {
             val intent = Intent(this, Login::class.java)
             intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
+            startActivity(intent)
+        }
+
+        val registerButton: Button = findViewById(R.id.btn_confirm_register)
+        registerButton.setOnClickListener {
+            val intent = Intent(this, Login::class.java)
             startActivity(intent)
         }
     }

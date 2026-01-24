@@ -2,6 +2,7 @@ package com.example.sample
 
 import android.content.Intent
 import android.os.Bundle
+import android.widget.Button
 import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -17,6 +18,13 @@ class Login : AppCompatActivity() {
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
+        }
+
+        // *** CRITICAL FIX: Redirect to Nickname screen instead of Dashboard ***
+        val loginButton: Button = findViewById(R.id.confirm_login)
+        loginButton.setOnClickListener {
+            val intent = Intent(this, NicknameActivity::class.java)
+            startActivity(intent)
         }
 
         val registerTextView: TextView = findViewById(R.id.textViewRegister)

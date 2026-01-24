@@ -12,7 +12,7 @@ class SplashActivity : AppCompatActivity() {
 
         val beginButton: Button = findViewById(R.id.button)
         beginButton.setOnClickListener {
-            val intent = Intent(this, DashboardActivity::class.java)
+            val intent = Intent(this, Login::class.java)
             startActivity(intent)
             finish()
         }
