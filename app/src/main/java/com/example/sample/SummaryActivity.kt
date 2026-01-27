@@ -1,47 +1,47 @@
 package com.example.sample
 
+import android.content.Context
 import android.os.Bundle
-import androidx.activity.ComponentActivity
-import androidx.activity.compose.setContent
-import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
-import com.example.sample.ui.theme.SampleTheme
+import android.widget.Button
+import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.example.sample.data.SampleSkills
 
-class SummaryActivity : ComponentActivity() {
+class SummaryActivity : AppCompatActivity() {
+
+    private lateinit var summaryRecyclerView: RecyclerView
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
-        setContent {
-            SampleTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Greeting2(
-                        name = "Android",
-                        modifier = Modifier.padding(innerPadding)
-                    )
-                }
-            }
+        setContentView(R.layout.activity_summary)
+
+        summaryRecyclerView = findViewById(R.id.summary_recycler_view)
+        summaryRecyclerView.layoutManager = LinearLayoutManager(this)
+
+        val titleTextView: TextView = findViewById(R.id.summary_text)
+        titleTextView.text = getString(R.string.summary)
+        val backButton: Button = findViewById(R.id.back_button)
+        backButton.setOnClickListener {
+            finish()
         }
     }
-}
 
-@Composable
-fun Greeting2(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
+    override fun onResume() {
+        super.onResume()
+        refreshSkillList()
+    }
 
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview2() {
-    SampleTheme {
-        Greeting2("Android")
+    private fun refreshSkillList() {
+        val levelStatusPrefs = getSharedPreferences("LevelStatus", Context.MODE_PRIVATE)
+        val startedSkills = SampleSkills.skills.filter { skill ->
+            (1..10).any { level ->
+                levelStatusPrefs.contains("${skill.name}_${level}_passed")
+            }
+        }
+
+        val adapter = SummaryAdapter(startedSkills, this)
+        summaryRecyclerView.adapter = adapter
     }
 }

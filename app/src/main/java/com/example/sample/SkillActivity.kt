@@ -149,7 +149,7 @@ class SkillActivity : AppCompatActivity() {
 
                 with(topicStatusPrefs.edit()) {
                     putBoolean(skillName, true)
-                    commit()
+                    apply()
                 }
             }
         }

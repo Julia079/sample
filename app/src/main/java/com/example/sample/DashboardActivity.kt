@@ -18,10 +18,16 @@ class DashboardActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
-        // *** CRITICAL FIX: Load and display the saved nickname ***
+        // *** CRITICAL FIX: Connect the Summary card to the SummaryActivity ***
+        val summaryCard: CardView = findViewById(R.id.view_summary)
+        summaryCard.setOnClickListener {
+            val intent = Intent(this, SummaryActivity::class.java)
+            startActivity(intent)
+        }
+
         val usernameTextView: TextView = findViewById(R.id.username)
         val sharedPrefs = getSharedPreferences("UserProfile", Context.MODE_PRIVATE)
-        val nickname = sharedPrefs.getString("NICKNAME", "Username") // Default to "Username"
+        val nickname = sharedPrefs.getString("NICKNAME", "Username")
         usernameTextView.text = nickname
     }
 }
