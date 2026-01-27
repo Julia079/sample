@@ -2,28 +2,51 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background_blue">
-    <!--palitan ng recylerview ang scroll view for less
-    memory usage sa long lists okie lator-->
-    <ScrollView
+    android:background="@color/background_blue"
+    tools:context=".SummaryActivity">
+    <TextView
+        android:id="@+id/summary_text"
         android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:fontFamily="@font/roboto_bold"
+        android:textAppearance="?attr/textAppearanceHeadline5"
+        android:textColor="@color/celestial_blue"
+        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/summary_recycler_view"
+        tools:text="Summary" />
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/back_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginBottom="20dp"
+        android:fontFamily="@font/blueberry_personal"
+        android:text="@string/back_button_text"
+        android:textSize="15sp"
+        app:backgroundTint="@color/celestial_blue"
+        app:cornerRadius="17dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/summary_recycler_view"/>
 
-        <TextView
-            android:id="@+id/text_summary"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:fontFamily="@font/roboto_bold"
-            android:gravity="center"
-            android:text="@string/summary"
-            android:textSize="20sp"
-            tools:layout_editor_absoluteX="179dp"
-            tools:layout_editor_absoluteY="50dp"/>
-    </ScrollView>
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/summary_recycler_view"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="16dp"
+        android:textAlignment="center"
+        app:layout_constraintBottom_toTopOf="@id/back_button"
+        app:layout_constraintTop_toBottomOf="@+id/summary_text"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintVertical_bias="0.0" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

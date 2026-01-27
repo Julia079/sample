@@ -1,17 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
-        android:icon="@mipmap/brainlogo_round"
+        android:icon="@drawable/finalbrain"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/brainlogo_round"
+        android:roundIcon="@mipmap/final_logo"
         android:supportsRtl="true"
         android:theme="@style/Theme.Sample">
-;
+
         <activity
             android:name=".NicknameActivity"
             android:exported="false"
@@ -38,17 +37,20 @@
             android:name=".FailedActivity"
             android:exported="false"
             android:theme="@style/Theme.Sample" />
-
-        <activity
-            android:name=".AssessmentActivity"
-            android:exported="false"
-            android:label="@string/title_activity_assessment"
-            android:theme="@style/Theme.Sample" />
         <activity
             android:name=".finishActivity"
             android:exported="false"
             android:label="@string/title_activity_finish"
             android:theme="@style/Theme.Sample" />
+
+        <!-- *** CRITICAL FIX: Register the new Summary activities *** -->
+        <activity
+            android:name=".SummaryActivity"
+            android:exported="false" />
+        <activity
+            android:name=".TopicSummaryActivity"
+            android:exported="false" />
+
         <activity
             android:name=".SplashActivity"
             android:exported="true">
@@ -59,7 +61,6 @@
             </intent-filter>
         </activity>
 
-        <!-- *** CRITICAL FIX: Add declarations for Login and Register activities *** -->
         <activity
             android:name=".Login"
             android:exported="false" />

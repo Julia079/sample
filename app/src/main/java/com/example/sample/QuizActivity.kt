@@ -237,7 +237,7 @@ class QuizActivity : AppCompatActivity() {
 
     private fun savePassedStatus(index: Int, passed: Boolean) {
         getSharedPreferences("LevelStatus", Context.MODE_PRIVATE).edit()
-            .putBoolean(getPassedKey(index), passed).commit()
+            .putBoolean(getPassedKey(index), passed).apply()
     }
 
     private fun getPassedStatus(index: Int): Boolean {
@@ -249,7 +249,7 @@ class QuizActivity : AppCompatActivity() {
         val prefs = getSharedPreferences("WrongAnswers", Context.MODE_PRIVATE)
         val wrongAnswers = prefs.getStringSet(getWrongAnswersKey(index), emptySet())?.toMutableSet() ?: mutableSetOf()
         wrongAnswers.add(selectedAnswer.toString())
-        prefs.edit().putStringSet(getWrongAnswersKey(index), wrongAnswers).commit()
+        prefs.edit().putStringSet(getWrongAnswersKey(index), wrongAnswers).apply()
     }
 
     private fun getWrongAnswers(index: Int): Set<Int> {
@@ -260,7 +260,7 @@ class QuizActivity : AppCompatActivity() {
     private fun incrementAttemptCount(index: Int) {
         val prefs = getSharedPreferences("AttemptCounter", Context.MODE_PRIVATE)
         val currentAttempts = prefs.getInt(getAttemptKey(index), 0)
-        prefs.edit().putInt(getAttemptKey(index), currentAttempts + 1).commit()
+        prefs.edit().putInt(getAttemptKey(index), currentAttempts + 1).apply()
     }
 
     private fun getAttemptCount(index: Int): Int {

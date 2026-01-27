@@ -53,6 +53,7 @@
     <string name="save">SAVE</string>
     <string name="logout">Logout</string>
     <string name="create_nickname">Create nickname</string>
+    <string name="topic">Topic</string>
 
 
 </resources>
