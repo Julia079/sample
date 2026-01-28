@@ -10,4 +10,5 @@
     <color name="star_yellow">#FFC107</color>
     <color name="gray">#808080</color>
     <color name="background_blue">#AACDFF</color>
+    <color name="text_crown">"#EAE9C5"</color>
 </resources>

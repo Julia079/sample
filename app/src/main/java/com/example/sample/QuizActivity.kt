@@ -1,7 +1,6 @@
 package com.example.sample
 
 import android.content.Context
-import android.content.Intent
 import android.content.res.ColorStateList
 import android.os.Bundle
 import android.view.View
@@ -93,7 +92,6 @@ class QuizActivity : AppCompatActivity() {
 
         val customFont = androidx.core.content.res.ResourcesCompat.getFont(this, R.font.roboto_bold)
 
-        // *** CRITICAL FIX: Create a ColorStateList for the RadioButton tint ***
         val colorStateList = ColorStateList(
             arrayOf(
                 intArrayOf(-android.R.attr.state_checked), // Unchecked
@@ -106,14 +104,21 @@ class QuizActivity : AppCompatActivity() {
         )
 
         question.options.forEachIndexed { index, option ->
-            val radioButton = RadioButton(this)
-            radioButton.text = option
-            radioButton.id = index
-            radioButton.textSize = 23f
-            radioButton.typeface = customFont
-            radioButton.buttonTintList = colorStateList // Apply the tint
-            val layoutParams = RadioGroup.LayoutParams(RadioGroup.LayoutParams.MATCH_PARENT, RadioGroup.LayoutParams.WRAP_CONTENT)
+            val radioButton = RadioButton(this).apply {
+                text = option
+                id = index
+                textSize = 23f
+                typeface = customFont
+                buttonTintList = colorStateList
+                background = ContextCompat.getDrawable(context, R.drawable.rounded_white_background)
+                setPadding(8, 8, 8, 8)
+            }
+
+            val layoutParams = RadioGroup.LayoutParams(RadioGroup.LayoutParams.MATCH_PARENT, RadioGroup.LayoutParams.WRAP_CONTENT).apply {
+                setMargins(8, 8, 8, 13)
+            }
             radioButton.layoutParams = layoutParams
+
             optionsRadioGroup.addView(radioButton)
         }
 
@@ -203,7 +208,9 @@ class QuizActivity : AppCompatActivity() {
         for (i in 0 until optionsRadioGroup.childCount) {
             val radioButton = optionsRadioGroup.getChildAt(i) as RadioButton
             val id = radioButton.id
-            radioButton.setTextColor(questionTextView.currentTextColor)
+
+            // Reset text color and drawables before applying new feedback
+            radioButton.setTextColor(ContextCompat.getColor(this, android.R.color.black))
             radioButton.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0)
 
             if (showCorrect && id == correctId) {
@@ -256,7 +263,7 @@ class QuizActivity : AppCompatActivity() {
         val prefs = getSharedPreferences("WrongAnswers", Context.MODE_PRIVATE)
         return prefs.getStringSet(getWrongAnswersKey(index), emptySet())?.mapNotNull { it.toIntOrNull() }?.toSet() ?: emptySet()
     }
-
+	
     private fun incrementAttemptCount(index: Int) {
         val prefs = getSharedPreferences("AttemptCounter", Context.MODE_PRIVATE)
         val currentAttempts = prefs.getInt(getAttemptKey(index), 0)
