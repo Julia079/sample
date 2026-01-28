@@ -1,77 +1,48 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginTop="25dp"
-    android:layout_marginBottom="0dp"
-    android:layout_marginLeft="10dp"
-    android:layout_marginRight="10dp"
-    android:background="@color/background_blue"
-    app:cardCornerRadius="8dp"
-    app:cardElevation="4dp">
+    android:layout_margin="8dp"
+    app:cardCornerRadius="16dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:padding="16dp">
 
         <TextView
-            android:id="@+id/leaderboard_rank"
+            android:id="@+id/rank_text_view"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:fontFamily="@font/blueberry_personal"
-
-            android:padding="10dp"
-            android:textColor="@color/star_yellow"
-            android:textSize="20sp"
+            android:text="1"
+            android:textSize="24sp"
+            android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/leaderboard_username"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:text="1" />
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/leaderboard_username"
-            android:layout_width="324dp"
-            android:layout_height="36dp"
-            android:fontFamily="@font/roboto_bold"
-            android:textAllCaps="false"
-            android:textAppearance="?attr/textAppearanceHeadline6"
-            android:textColor="@color/celestial_blue"
-            android:textSize="25sp"
-            app:layout_constraintBottom_toTopOf="@+id/leaderboard_knowledge"
-            app:layout_constraintEnd_toStartOf="@+id/crown"
-            app:layout_constraintStart_toEndOf="@+id/leaderboard_rank"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_chainStyle="packed"
-            tools:text="Username" />
-
-        <TextView
-            android:id="@+id/leaderboard_knowledge"
+            android:id="@+id/nickname_text_view"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="12dp"
-            android:layout_marginTop="4dp"
-            android:textAppearance="?attr/textAppearanceBody2"
-            android:textSize="15sp"
+            android:layout_marginStart="16dp"
+            android:text="Nickname"
+            android:textSize="20sp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="@+id/leaderboard_username"
-            app:layout_constraintStart_toStartOf="@+id/leaderboard_username"
-            app:layout_constraintTop_toBottomOf="@+id/leaderboard_username"
-            tools:text="Knowledge level." />
+            app:layout_constraintEnd_toStartOf="@+id/score_text_view"
+            app:layout_constraintStart_toEndOf="@+id/rank_text_view"
+            app:layout_constraintTop_toTopOf="parent" />
 
-        <ImageView
-            android:id="@+id/crown"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:src="@drawable/crown"
+        <TextView
+            android:id="@+id/score_text_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Score: 100"
+            android:textSize="20sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toEndOf="@id/leaderboard_username"
-            tools:ignore="ContentDescription" />
+            app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

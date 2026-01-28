@@ -19,6 +19,7 @@ import com.example.sample.models.Question
 class TopicSummaryActivity : AppCompatActivity() {
 
     private lateinit var skillName: String
+    private lateinit var nickname: String
     private lateinit var recyclerView: RecyclerView
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -45,6 +46,9 @@ class TopicSummaryActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
+        val userProfilePrefs = getSharedPreferences("UserProfile", Context.MODE_PRIVATE)
+        nickname = userProfilePrefs.getString("NICKNAME", "") ?: ""
+
         refreshAnsweredQuestions()
     }
 
@@ -53,7 +57,7 @@ class TopicSummaryActivity : AppCompatActivity() {
 
         val answeredQuestions = allQuestions.mapIndexedNotNull { index, question ->
             val levelStatusPrefs = getSharedPreferences("LevelStatus", Context.MODE_PRIVATE)
-            val passedKey = "${skillName}_${index + 1}_passed"
+            val passedKey = "${nickname}_${skillName}_${index + 1}_passed"
             if (levelStatusPrefs.contains(passedKey)) {
                 Pair(index, question)
             } else {
@@ -93,7 +97,7 @@ class TopicSummaryActivity : AppCompatActivity() {
         val sharedPref = getSharedPreferences("LevelStatus", Context.MODE_PRIVATE)
         var score = 0
         for (i in 1..10) {
-            val key = "${skillName}_${i}_passed"
+            val key = "${nickname}_${skillName}_${i}_passed"
             if (sharedPref.getBoolean(key, false)) {
                 score++
             }

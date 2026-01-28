@@ -5,7 +5,6 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.widget.Button
-import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -13,25 +12,21 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.sample.data.SampleSkills
 
 class MainActivity : AppCompatActivity() {
+
+    private lateinit var nickname: String
+    private lateinit var skillTreeRecyclerView: RecyclerView
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val skillTreeRecyclerView: RecyclerView = findViewById(R.id.skill_tree_recycler_view)
+        skillTreeRecyclerView = findViewById(R.id.skill_tree_recycler_view)
         skillTreeRecyclerView.layoutManager = LinearLayoutManager(this)
-        val titleTextView: TextView = findViewById(R.id.topic_text)
-        titleTextView.text = getString(R.string.topic)
 
         val resetButton: Button = findViewById(R.id.reset_button)
         resetButton.setOnClickListener {
-            getSharedPreferences("LevelStatus", Context.MODE_PRIVATE).edit().clear().apply()
-            getSharedPreferences("TopicStatus", Context.MODE_PRIVATE).edit().clear().apply()
-            getSharedPreferences("WrongAnswers", Context.MODE_PRIVATE).edit().clear().apply()
-            getSharedPreferences("AttemptCounter", Context.MODE_PRIVATE).edit().clear().apply()
-            getSharedPreferences("TopicUnlockStatus", Context.MODE_PRIVATE).edit().clear().apply()
-
-            Toast.makeText(this, "All progress has been reset.", Toast.LENGTH_SHORT).show()
-
+            resetAllProgressForCurrentUser()
+            Toast.makeText(this, "All progress for $nickname has been reset.", Toast.LENGTH_SHORT).show()
             recreate()
         }
 
@@ -41,6 +36,33 @@ class MainActivity : AppCompatActivity() {
             startActivity(intent)
             finish()
         }
+    }
+
+    private fun resetAllProgressForCurrentUser() {
+        val levelStatusPrefs = getSharedPreferences("LevelStatus", Context.MODE_PRIVATE).edit()
+        val topicStatusPrefs = getSharedPreferences("TopicStatus", Context.MODE_PRIVATE).edit()
+        val wrongAnswersPrefs = getSharedPreferences("WrongAnswers", Context.MODE_PRIVATE).edit()
+        val attemptCounterPrefs = getSharedPreferences("AttemptCounter", Context.MODE_PRIVATE).edit()
+        val topicUnlockPrefs = getSharedPreferences("TopicUnlockStatus", Context.MODE_PRIVATE).edit()
+        val assessmentStatusPrefs = getSharedPreferences("AssessmentStatus", Context.MODE_PRIVATE).edit()
+
+        for (skill in SampleSkills.skills) {
+            topicUnlockPrefs.remove("${nickname}_${skill.name}")
+            topicStatusPrefs.remove("${nickname}_${skill.name}_shown")
+            for (i in 1..10) {
+                levelStatusPrefs.remove("${nickname}_${skill.name}_${i}_passed")
+                wrongAnswersPrefs.remove("${nickname}_${skill.name}_${i}_wrong_answers")
+                attemptCounterPrefs.remove("${nickname}_${skill.name}_${i}_attempts")
+            }
+        }
+        assessmentStatusPrefs.remove("${nickname}_hasTakenAssessment")
+
+        levelStatusPrefs.apply()
+        topicStatusPrefs.apply()
+        wrongAnswersPrefs.apply()
+        attemptCounterPrefs.apply()
+        topicUnlockPrefs.apply()
+        assessmentStatusPrefs.apply()
     }
 
     private fun updateTopicUnlockStatus() {
@@ -53,9 +75,9 @@ class MainActivity : AppCompatActivity() {
             val currentSkill = SampleSkills.skills[i]
             val previousSkill = SampleSkills.skills[i - 1]
 
-            if (!unlockPrefs.getBoolean(currentSkill.name, false)) {
+            if (!unlockPrefs.getBoolean("${nickname}_${currentSkill.name}", false)) {
                 if (isTopicPassed(levelStatusPrefs, previousSkill.name)) {
-                    editor.putBoolean(currentSkill.name, true)
+                    editor.putBoolean("${nickname}_${currentSkill.name}", true)
                     changed = true
                 }
             }
@@ -69,7 +91,7 @@ class MainActivity : AppCompatActivity() {
     private fun isTopicPassed(prefs: SharedPreferences, topicName: String): Boolean {
         var passedLevels = 0
         for (i in 1..10) {
-            if (prefs.getBoolean("${topicName}_${i}_passed", false)) {
+            if (prefs.getBoolean("${nickname}_${topicName}_${i}_passed", false)) {
                 passedLevels++
             }
         }
@@ -79,8 +101,10 @@ class MainActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
+        val userProfilePrefs = getSharedPreferences("UserProfile", Context.MODE_PRIVATE)
+        nickname = userProfilePrefs.getString("NICKNAME", "") ?: ""
+
         updateTopicUnlockStatus()
-        val skillTreeRecyclerView: RecyclerView = findViewById(R.id.skill_tree_recycler_view)
         skillTreeRecyclerView.adapter = SkillAdapter(SampleSkills.skills, this)
     }
 }

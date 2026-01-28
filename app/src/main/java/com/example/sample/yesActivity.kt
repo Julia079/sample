@@ -13,9 +13,9 @@ class YesActivity : AppCompatActivity() {
         val finalMessageTextView = findViewById<TextView>(R.id.final_message_text)
         val rootLayout = findViewById<ConstraintLayout>(R.id.root_layout)
 
-        // *** CRITICAL FIX: Get the combined message from the Intent and display it ***
-        val combinedMessage = intent.getStringExtra("USER_CHOICE")
-        finalMessageTextView.text = combinedMessage
+        // Get the message from the Intent and display it.
+        val userChoiceMessage = intent.getStringExtra("USER_CHOICE")
+        finalMessageTextView.text = userChoiceMessage
 
         rootLayout.setOnClickListener {
             finish()

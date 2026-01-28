@@ -1,5 +1,6 @@
 package com.example.sample
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
@@ -20,11 +21,20 @@ class Login : AppCompatActivity() {
             insets
         }
 
-        // *** CRITICAL FIX: Redirect to Nickname screen instead of Dashboard ***
         val loginButton: Button = findViewById(R.id.confirm_login)
         loginButton.setOnClickListener {
-            val intent = Intent(this, NicknameActivity::class.java)
-            startActivity(intent)
+            val sharedPrefs = getSharedPreferences("UserProfile", Context.MODE_PRIVATE)
+            val nickname = sharedPrefs.getString("NICKNAME", null)
+
+            if (nickname.isNullOrBlank()) {
+                // If nickname doesn't exist, go to NicknameActivity
+                val intent = Intent(this, NicknameActivity::class.java)
+                startActivity(intent)
+            } else {
+                // If nickname exists, go straight to the Dashboard
+                val intent = Intent(this, DashboardActivity::class.java)
+                startActivity(intent)
+            }
         }
 
         val registerTextView: TextView = findViewById(R.id.textViewRegister)

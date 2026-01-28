@@ -17,6 +17,7 @@ class SkillActivity : AppCompatActivity() {
     private lateinit var levelContainer: LinearLayout
     private val levelStatus = mutableMapOf<Int, Boolean?>()
     private lateinit var skillName: String
+    private lateinit var nickname: String
     private lateinit var scoreTextView: TextView
     private lateinit var percentageTextView: TextView
 
@@ -25,6 +26,7 @@ class SkillActivity : AppCompatActivity() {
         setContentView(R.layout.activity_skill)
 
         skillName = intent.getStringExtra("SKILL_NAME") ?: ""
+
         val skillTitle: TextView = findViewById(R.id.skill_title)
         skillTitle.text = skillName
 
@@ -37,7 +39,7 @@ class SkillActivity : AppCompatActivity() {
             finish()
         }
 
-        val scoreButton: Button = findViewById(R.id.reset_button) 
+        val scoreButton: Button = findViewById(R.id.reset_button)
         scoreButton.setOnClickListener {
             val score = levelStatus.values.count { it == true }
             val percentage = ((score.toDouble() / 10.0) * 100).toInt()
@@ -55,6 +57,9 @@ class SkillActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
+        val userProfilePrefs = getSharedPreferences("UserProfile", Context.MODE_PRIVATE)
+        nickname = userProfilePrefs.getString("NICKNAME", "") ?: ""
+
         loadLevelStatus()
         updateLevelButtons()
         updateScoreDisplay()
@@ -117,7 +122,6 @@ class SkillActivity : AppCompatActivity() {
         val percentage = (score.toDouble() / 10.0) * 100
         percentageTextView.text = "(${percentage.toInt()}%)"
 
-        // *** CRITICAL FIX: Apply color to both score and percentage TextViews ***
         val colorRes = if (percentage >= 80) R.color.green else R.color.red
         val colorStateList = ContextCompat.getColorStateList(this, colorRes)
         scoreTextView.setTextColor(colorStateList)
@@ -126,7 +130,8 @@ class SkillActivity : AppCompatActivity() {
 
     private fun checkTopicCompletion() {
         val topicStatusPrefs = getSharedPreferences("TopicStatus", Context.MODE_PRIVATE)
-        val hasBeenShown = topicStatusPrefs.getBoolean(skillName, false)
+        val hasBeenShownKey = "${nickname}_${skillName}_shown"
+        val hasBeenShown = topicStatusPrefs.getBoolean(hasBeenShownKey, false)
 
         if (!hasBeenShown) {
             val answeredCount = levelStatus.values.count { it != null }
@@ -148,7 +153,7 @@ class SkillActivity : AppCompatActivity() {
                 startActivity(intent)
 
                 with(topicStatusPrefs.edit()) {
-                    putBoolean(skillName, true)
+                    putBoolean(hasBeenShownKey, true)
                     apply()
                 }
             }
@@ -159,7 +164,7 @@ class SkillActivity : AppCompatActivity() {
         val sharedPref = getSharedPreferences("LevelStatus", Context.MODE_PRIVATE) ?: return
         levelStatus.clear()
         for (i in 1..10) {
-            val key = "${skillName}_${i}_passed"
+            val key = "${nickname}_${skillName}_${i}_passed"
             if (sharedPref.contains(key)) {
                 levelStatus[i] = sharedPref.getBoolean(key, false)
             } else {

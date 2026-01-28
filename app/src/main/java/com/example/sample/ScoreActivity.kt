@@ -14,12 +14,16 @@ import androidx.core.content.ContextCompat
 class ScoreActivity : AppCompatActivity() {
 
     private lateinit var skillName: String
+    private lateinit var nickname: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_score)
 
         skillName = intent.getStringExtra("SKILL_NAME") ?: ""
+        val userProfilePrefs = getSharedPreferences("UserProfile", Context.MODE_PRIVATE)
+        nickname = userProfilePrefs.getString("NICKNAME", "") ?: ""
+
         val score = intent.getIntExtra("SCORE", 0)
         val percentage = intent.getIntExtra("PERCENTAGE", 0)
         val source = intent.getStringExtra("SOURCE") ?: ""
@@ -103,12 +107,12 @@ class ScoreActivity : AppCompatActivity() {
         val attemptCounterPrefs = getSharedPreferences("AttemptCounter", Context.MODE_PRIVATE).edit()
 
         for (i in 1..10) {
-            levelStatusPrefs.remove("${skillName}_${i}_passed")
-            wrongAnswersPrefs.remove("${skillName}_${i}_wrong_answers")
-            attemptCounterPrefs.remove("${skillName}_${i}_attempts")
+            levelStatusPrefs.remove("${nickname}_${skillName}_${i}_passed")
+            wrongAnswersPrefs.remove("${nickname}_${skillName}_${i}_wrong_answers")
+            attemptCounterPrefs.remove("${nickname}_${skillName}_${i}_attempts")
         }
-        
-        topicStatusPrefs.remove(skillName)
+
+        topicStatusPrefs.remove("${nickname}_${skillName}_shown")
 
         levelStatusPrefs.apply()
         topicStatusPrefs.apply()

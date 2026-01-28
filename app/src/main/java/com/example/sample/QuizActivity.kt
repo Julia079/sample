@@ -32,6 +32,7 @@ class QuizActivity : AppCompatActivity() {
 
     private lateinit var questions: List<Question>
     private lateinit var skillName: String
+    private lateinit var nickname: String
     private var currentQuestionIndex: Int = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -40,6 +41,9 @@ class QuizActivity : AppCompatActivity() {
 
         skillName = intent.getStringExtra("SKILL_NAME") ?: ""
         currentQuestionIndex = (intent.getIntExtra("LEVEL", 1) - 1).coerceAtLeast(0)
+
+        val userProfilePrefs = getSharedPreferences("UserProfile", Context.MODE_PRIVATE)
+        nickname = userProfilePrefs.getString("NICKNAME", "") ?: ""
 
         initializeViews()
         loadQuestionsForSkill()
@@ -111,11 +115,11 @@ class QuizActivity : AppCompatActivity() {
                 typeface = customFont
                 buttonTintList = colorStateList
                 background = ContextCompat.getDrawable(context, R.drawable.rounded_white_background)
-                setPadding(8, 8, 8, 8)
+                setPadding(48, 48, 48, 48)
             }
 
             val layoutParams = RadioGroup.LayoutParams(RadioGroup.LayoutParams.MATCH_PARENT, RadioGroup.LayoutParams.WRAP_CONTENT).apply {
-                setMargins(8, 8, 8, 13)
+                setMargins(0, 16, 0, 16)
             }
             radioButton.layoutParams = layoutParams
 
@@ -209,7 +213,6 @@ class QuizActivity : AppCompatActivity() {
             val radioButton = optionsRadioGroup.getChildAt(i) as RadioButton
             val id = radioButton.id
 
-            // Reset text color and drawables before applying new feedback
             radioButton.setTextColor(ContextCompat.getColor(this, android.R.color.black))
             radioButton.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0)
 
@@ -234,13 +237,13 @@ class QuizActivity : AppCompatActivity() {
         if (currentQuestionIndex < questions.size - 1) {
             navigateToQuestion(currentQuestionIndex + 1)
         } else {
-            finish() // Let SkillActivity handle completion
+            finish()
         }
     }
 
-    private fun getPassedKey(index: Int): String = "${skillName}_${index + 1}_passed"
-    private fun getWrongAnswersKey(index: Int): String = "${skillName}_${index + 1}_wrong_answers"
-    private fun getAttemptKey(index: Int): String = "${skillName}_${index + 1}_attempts"
+    private fun getPassedKey(index: Int): String = "${nickname}_${skillName}_${index + 1}_passed"
+    private fun getWrongAnswersKey(index: Int): String = "${nickname}_${skillName}_${index + 1}_wrong_answers"
+    private fun getAttemptKey(index: Int): String = "${nickname}_${skillName}_${index + 1}_attempts"
 
     private fun savePassedStatus(index: Int, passed: Boolean) {
         getSharedPreferences("LevelStatus", Context.MODE_PRIVATE).edit()
@@ -263,7 +266,7 @@ class QuizActivity : AppCompatActivity() {
         val prefs = getSharedPreferences("WrongAnswers", Context.MODE_PRIVATE)
         return prefs.getStringSet(getWrongAnswersKey(index), emptySet())?.mapNotNull { it.toIntOrNull() }?.toSet() ?: emptySet()
     }
-	
+
     private fun incrementAttemptCount(index: Int) {
         val prefs = getSharedPreferences("AttemptCounter", Context.MODE_PRIVATE)
         val currentAttempts = prefs.getInt(getAttemptKey(index), 0)

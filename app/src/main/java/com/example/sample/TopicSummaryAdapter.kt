@@ -19,6 +19,11 @@ class TopicSummaryAdapter(
     private val skillName: String
 ) : RecyclerView.Adapter<TopicSummaryAdapter.ViewHolder>() {
 
+    private val nickname: String by lazy {
+        val userProfilePrefs = context.getSharedPreferences("UserProfile", Context.MODE_PRIVATE)
+        userProfilePrefs.getString("NICKNAME", "") ?: ""
+    }
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(context).inflate(R.layout.summary_item, parent, false)
         return ViewHolder(view)
@@ -39,9 +44,9 @@ class TopicSummaryAdapter(
         val wrongAnswersPrefs = context.getSharedPreferences("WrongAnswers", Context.MODE_PRIVATE)
         val attemptCounterPrefs = context.getSharedPreferences("AttemptCounter", Context.MODE_PRIVATE)
 
-        val passedKey = "${skillName}_${originalIndex + 1}_passed"
-        val wrongAnswersKey = "${skillName}_${originalIndex + 1}_wrong_answers"
-        val attemptKey = "${skillName}_${originalIndex + 1}_attempts"
+        val passedKey = "${nickname}_${skillName}_${originalIndex + 1}_passed"
+        val wrongAnswersKey = "${nickname}_${skillName}_${originalIndex + 1}_wrong_answers"
+        val attemptKey = "${nickname}_${skillName}_${originalIndex + 1}_attempts"
 
         val isPassed = levelStatusPrefs.getBoolean(passedKey, false)
         val hasBeenAttempted = levelStatusPrefs.contains(passedKey)

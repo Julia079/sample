@@ -18,26 +18,28 @@ class NicknameActivity : AppCompatActivity() {
         val closeButton: ImageView = findViewById(R.id.nickname_popup_close_button)
         val nicknameLayout: TextInputLayout = findViewById(R.id.nickname_box)
 
-        val sharedPrefs = getSharedPreferences("UserProfile", Context.MODE_PRIVATE)
-        val currentNickname = sharedPrefs.getString("NICKNAME", "")
-        nicknameLayout.editText?.setText(currentNickname)
-
         saveButton.setOnClickListener {
-            // 1. Get the text and trim whitespace (so "   " counts as empty)
             val newNickname = nicknameLayout.editText?.text.toString().trim()
 
-            // 2. CHECK: Is the nickname empty?
             if (newNickname.isEmpty()) {
-                // FAIL: Show an error message on the box and stop here
                 nicknameLayout.error = "Nickname is required to login"
-                nicknameLayout.isErrorEnabled = true // Ensures the red message shows
+                nicknameLayout.isErrorEnabled = true
             } else {
-                // SUCCESS: Clear error, Save, and Proceed
                 nicknameLayout.error = null
                 nicknameLayout.isErrorEnabled = false
 
-                sharedPrefs.edit {
+                // Save the current user's nickname for this session.
+                val userProfilePrefs = getSharedPreferences("UserProfile", Context.MODE_PRIVATE)
+                userProfilePrefs.edit {
                     putString("NICKNAME", newNickname)
+                }
+
+                // Add the new nickname to the definitive master list of all users.
+                // This new method is simpler and more reliable.
+                val allUsersPrefs = getSharedPreferences("AllUsers", Context.MODE_PRIVATE)
+                allUsersPrefs.edit {
+                    // We use the nickname itself as the key. The value doesn't matter.
+                    putBoolean(newNickname, true)
                 }
 
                 val intent = Intent(this, DashboardActivity::class.java)
@@ -47,9 +49,6 @@ class NicknameActivity : AppCompatActivity() {
         }
 
         closeButton.setOnClickListener {
-            // OPTIONAL: If they click X, do you want to close the app?
-            // If nickname is required, they shouldn't be able to just close this popup and enter.
-            // For now, finishing the activity is fine if this is a popup.
             finish()
         }
     }
