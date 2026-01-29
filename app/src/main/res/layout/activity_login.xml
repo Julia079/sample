@@ -25,7 +25,7 @@
         app:layout_constraintVertical_bias="0.100000024" />
 
     <EditText
-        android:id="@+id/input_email"
+        android:id="@+id/input_nickname"
         android:layout_width="0dp"
         android:layout_height="48dp"
         app:layout_constraintWidth_max="400dp"
@@ -46,10 +46,10 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/login"
-        tools:ignore="DuplicateIds,TextFields,VisualLintTextFieldSize" />
+        tools:ignore="VisualLintTextFieldSize" />
 
     <EditText
-        android:id="@+id/input_password"
+        android:id="@+id/input_email"
         android:layout_width="0dp"
         android:layout_height="48dp"
         android:layout_marginTop="16dp"
@@ -64,10 +64,10 @@
         android:paddingTop="10dp"
         android:paddingEnd="10dp"
         android:paddingBottom="10dp"
-        app:layout_constraintEnd_toEndOf="@+id/input_email"
-        app:layout_constraintStart_toStartOf="@+id/input_email"
-        app:layout_constraintTop_toBottomOf="@+id/input_email"
-        tools:ignore="DuplicateIds,TextFields,VisualLintTextFieldSize" />
+        app:layout_constraintEnd_toEndOf="@+id/input_nickname"
+        app:layout_constraintStart_toStartOf="@+id/input_nickname"
+        app:layout_constraintTop_toBottomOf="@+id/input_nickname"
+        tools:ignore="TextFields,VisualLintTextFieldSize" />
 
     <TextView
         android:id="@+id/forgot_password"
@@ -78,8 +78,8 @@
         android:textColor="@color/black"
         android:textSize="16sp"
         android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="@+id/input_password"
-        app:layout_constraintTop_toBottomOf="@+id/input_password" />
+        app:layout_constraintEnd_toEndOf="@+id/input_email"
+        app:layout_constraintTop_toBottomOf="@+id/input_email" />
 
     <Button
         android:id="@+id/confirm_login"
@@ -92,8 +92,8 @@
         android:textColorLink="@color/celestial_blue"
         android:textSize="14sp"
         app:backgroundTint="@color/celestial_blue"
-        app:layout_constraintEnd_toEndOf="@+id/input_password"
-        app:layout_constraintStart_toStartOf="@+id/input_password"
+        app:layout_constraintEnd_toEndOf="@+id/input_email"
+        app:layout_constraintStart_toStartOf="@+id/input_email"
         app:layout_constraintTop_toBottomOf="@+id/forgot_password" />
 
     <LinearLayout
@@ -127,5 +127,37 @@
             android:translationX="5dp" />
 
     </LinearLayout>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btn_google"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintWidth_max="400dp"
+        android:layout_marginStart="64dp"
+        android:layout_marginTop="32dp"
+        android:layout_marginEnd="64dp"
+        app:backgroundTint="@color/white"
+        app:icon="@drawable/google"
+        app:iconTint="@null"
+        android:text="@string/google"
+        android:textColor="@color/black"
+        app:iconGravity="textStart"
+        app:iconPadding="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.523"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout2" />
+
+    <TextView
+        android:id="@+id/textView4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="6dp"
+        android:text="@string/or"
+        android:textColor="@color/black"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout2" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
