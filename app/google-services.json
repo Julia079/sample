@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "750991430539",
+    "project_id": "howtobit-login-register-6c226",
+    "storage_bucket": "howtobit-login-register-6c226.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:750991430539:android:e5d8daca4c7c0ae8ae558e",
+        "android_client_info": {
+          "package_name": "com.example.sample"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCTSFp2iUhejx6IG62KkU6lXQAKTk0MQmk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
